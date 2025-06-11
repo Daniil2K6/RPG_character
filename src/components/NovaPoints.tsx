@@ -1,7 +1,6 @@
 import { Box, Paper, Typography, TextField, Stack, IconButton } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 import type { NovaPoints } from '../types/character';
-import { useEffect } from 'react';
 
 interface NovaPointsComponentProps {
   points: NovaPoints;
@@ -18,41 +17,6 @@ export const NovaPointsComponent: React.FC<NovaPointsComponentProps> = ({
   onLevelChange,
   readonly = false,
 }) => {
-  // Функция для подсчета дополнительных очков при изменении уровня
-  const calculateAdditionalPoints = (oldLevel: number, newLevel: number): NovaPoints => {
-    const oldPoints = {
-      son: 0,
-      lon: Math.floor(oldLevel / 10),
-      on: oldLevel >= 6 ? oldLevel - 5 : 0
-    };
-
-    const newPoints = {
-      son: 0,
-      lon: Math.floor(newLevel / 10),
-      on: newLevel >= 6 ? newLevel - 5 : 0
-    };
-
-    // Считаем СОН за уровни 2-5
-    if (newLevel >= 2 && newLevel <= 5) {
-      newPoints.son = newLevel - 1;
-    } else if (newLevel > 5) {
-      newPoints.son = 4;
-    }
-
-    if (oldLevel >= 2 && oldLevel <= 5) {
-      oldPoints.son = oldLevel - 1;
-    } else if (oldLevel > 5) {
-      oldPoints.son = 4;
-    }
-
-    // Вычисляем разницу
-    return {
-      son: newPoints.son - oldPoints.son,
-      lon: newPoints.lon - oldPoints.lon,
-      on: newPoints.on - oldPoints.on
-    };
-  };
-
   const handleFastLevelUp = () => {
     const newLevel = level + 10;
     const newPoints = { ...points };
