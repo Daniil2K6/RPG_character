@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Paper, Typography, Box } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 
 export const Timer: React.FC = () => {
   const [time, setTime] = useState(new Date());

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { HomePage } from './components/HomePage';
 import { CharacterCard } from './components/CharacterCard';
 import { type Character, type TemplateType, DEFAULT_CHARACTER } from './types/character';

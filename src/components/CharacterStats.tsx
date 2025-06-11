@@ -1,4 +1,4 @@
-import { Box, Paper, Typography, TextField, IconButton, Stack, Button } from '@mui/material';
+import { Box, Paper, Typography, TextField, IconButton, Stack } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 import type { CharacterStats } from '../types/character';
 
