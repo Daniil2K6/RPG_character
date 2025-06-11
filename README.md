@@ -24,7 +24,7 @@
 
 1. Клонируйте репозиторий:
 ```bash
-git clone [url-репозитория]
+git clone https://github.com/Daniil2K6/RPG_character.git
 ```
 
 2. Установите зависимости:

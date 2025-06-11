@@ -7,7 +7,19 @@ export interface CharacterStats {
   charisma: number;
 }
 
-export type TemplateType = 'base' | 'nova';
+export type TemplateType = 'base' | 'nova-player';
+
+export type AbilityRarity = 
+  | 'common' 
+  | 'uncommon' 
+  | 'rare' 
+  | 'epic' 
+  | 'legendary' 
+  | 'mythical' 
+  | 'divine' 
+  | 'phantasm' 
+  | 'oversystem' 
+  | 'extrasystem';
 
 export interface CustomTab {
   id: string;
@@ -15,10 +27,19 @@ export interface CustomTab {
   content: string;
 }
 
+export interface NovaPoints {
+  on: number; // Обычные очки навыков
+  son: number; // Свободные очки навыков
+  lon: number; // Легендарные очки навыков
+}
+
 export interface Ability {
   id: string;
   name: string;
   description: string;
+  level: number;
+  maxLevel: number;
+  rarity: AbilityRarity;
   isExpanded?: boolean;
 }
 
@@ -27,8 +48,9 @@ export interface CharacterTemplate {
   type: TemplateType;
   name: string;
   description: string;
-  defaultStats: CharacterStats;
-  initialFreePoints: number;
+  defaultStats?: CharacterStats;
+  initialPoints?: NovaPoints;
+  initialFreePoints?: number;
 }
 
 export interface Character {
@@ -38,11 +60,12 @@ export interface Character {
   level: number;
   imageUrl: string;
   description: string;
-  stats: CharacterStats;
+  stats?: CharacterStats;
+  novaPoints?: NovaPoints;
   templateType: TemplateType;
   createdAt: string;
   lastModifiedAt: string;
-  freePoints: number;
+  freePoints?: number;
   abilities: Ability[];
   customTabs: CustomTab[];
 }
@@ -64,19 +87,40 @@ export const TEMPLATES: Record<TemplateType, CharacterTemplate> = {
     },
     initialFreePoints: 10,
   },
-  nova: {
-    id: 'nova',
-    type: 'nova',
-    name: 'Nova',
-    description: 'Шаблон для создания персонажа в системе Nova',
-    defaultStats: {
-      strength: 10,
-      dexterity: 10,
-      constitution: 10,
-      intelligence: 10,
-      wisdom: 10,
-      charisma: 10,
-    },
-    initialFreePoints: 10,
+  'nova-player': {
+    id: 'nova-player',
+    type: 'nova-player',
+    name: 'Nova Игрок',
+    description: 'Шаблон для создания игрового персонажа в системе Nova',
+    initialPoints: {
+      on: 0,
+      son: 1,
+      lon: 0,
+    }
   },
+};
+
+export const DEFAULT_CHARACTER: Character = {
+  id: crypto.randomUUID(),
+  name: 'Новый персонаж',
+  race: '',
+  level: 1,
+  description: '',
+  imageUrl: '/placeholder.png',
+  templateType: 'nova-player',
+  customTabs: [
+    {
+      id: crypto.randomUUID(),
+      title: 'Задания',
+      content: ''
+    }
+  ],
+  abilities: [],
+  novaPoints: {
+    son: 1,
+    on: 0,
+    lon: 0
+  },
+  createdAt: new Date().toISOString(),
+  lastModifiedAt: new Date().toISOString(),
 }; 

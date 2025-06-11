@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { HomePage } from './components/HomePage';
 import { CharacterCard } from './components/CharacterCard';
-import { TEMPLATES, type Character, type TemplateType } from './types/character';
+import { type Character, type TemplateType, DEFAULT_CHARACTER } from './types/character';
+import { TEMPLATES } from './types/templates';
 
 const theme = createTheme({
   palette: {
@@ -16,20 +17,24 @@ function App() {
   const handleCreateCharacter = (templateType: TemplateType) => {
     const template = TEMPLATES[templateType];
     const newCharacter: Character = {
+      ...DEFAULT_CHARACTER,
       id: crypto.randomUUID(),
-      name: 'Новый персонаж',
-      race: '',
-      level: 1,
-      imageUrl: 'https://via.placeholder.com/300',
-      description: 'Описание персонажа',
-      stats: template.defaultStats,
       templateType,
-      freePoints: template.initialFreePoints,
       createdAt: new Date().toISOString(),
       lastModifiedAt: new Date().toISOString(),
-      abilities: [],
-      customTabs: [],
     };
+
+    // Добавляем специфичные для шаблона свойства
+    if (templateType === 'base') {
+      newCharacter.stats = template.defaultStats;
+      newCharacter.freePoints = template.initialFreePoints;
+      newCharacter.novaPoints = undefined;
+    } else if (templateType === 'nova-player') {
+      newCharacter.novaPoints = template.initialPoints;
+      newCharacter.stats = undefined;
+      newCharacter.freePoints = undefined;
+    }
+
     setCharacter(newCharacter);
   };
 

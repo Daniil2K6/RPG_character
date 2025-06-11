@@ -1,6 +1,7 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
 import { Add as AddIcon, Upload as UploadIcon } from '@mui/icons-material';
-import { TEMPLATES, type Character, type TemplateType } from '../types/character';
+import { type Character, type TemplateType } from '../types/character';
+import { TEMPLATES } from '../types/templates';
 import { Timer } from './Timer';
 
 interface HomePageProps {
@@ -32,6 +33,29 @@ export const HomePage: React.FC<HomePageProps> = ({
     }
   };
 
+  const getTemplateDescription = (template: typeof TEMPLATES[TemplateType]) => {
+    if (template.type === 'nova-player') {
+      return (
+        <Box component="span">
+          <Typography variant="caption" component="span" sx={{ ml: 2, opacity: 0.8 }}>
+            {template.description}
+          </Typography>
+          <Typography variant="caption" component="div" sx={{ ml: 2, opacity: 0.8 }}>
+            • Система очков: ОН (обычные), СОН (свободные), ЛОН (легендарные)
+          </Typography>
+          <Typography variant="caption" component="div" sx={{ ml: 2, opacity: 0.8 }}>
+            • Начальные очки: 1 СОН
+          </Typography>
+        </Box>
+      );
+    }
+    return (
+      <Typography variant="caption" component="span" sx={{ ml: 2, opacity: 0.8 }}>
+        {template.description}
+      </Typography>
+    );
+  };
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper sx={{ p: 4 }}>
@@ -54,13 +78,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 fullWidth
               >
                 Шаблон ({template.name})
-                <Typography
-                  variant="caption"
-                  component="span"
-                  sx={{ ml: 2, opacity: 0.8 }}
-                >
-                  {template.description}
-                </Typography>
+                {getTemplateDescription(template)}
               </Button>
             ))}
           </Stack>
