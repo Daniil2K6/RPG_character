@@ -339,41 +339,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
     setSelectedTab(null);
   };
 
-  const handleAddAbility = (
-    name: string,
-    description: string,
-    level: number,
-    maxLevel: number,
-    rarity: AbilityRarity
-  ) => {
-    if (editingAbility) {
-      onCharacterChange({
-        ...character,
-        abilities: character.abilities.map(ability =>
-          ability.id === editingAbility.id
-            ? { ...ability, name, description, level, maxLevel, rarity }
-            : ability
-        ),
-        lastModifiedAt: new Date().toISOString(),
-      });
-      setEditingAbility(undefined);
-    } else {
-      const newAbility: Ability = {
-        id: crypto.randomUUID(),
-        name,
-        description,
-        level,
-        maxLevel,
-        rarity,
-      };
-      onCharacterChange({
-        ...character,
-        abilities: [...character.abilities, newAbility],
-        lastModifiedAt: new Date().toISOString(),
-      });
-    }
-  };
-
   const handleDeleteAbility = (abilityId: string) => {
     if (window.confirm('Вы уверены, что хотите удалить эту способность?')) {
       onCharacterChange({
@@ -852,6 +817,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         onClose={() => {
           setIsAbilityDialogOpen(false);
           setEditingAbility(undefined);
+          setCreatingAbilityType(null);
         }}
         onSave={handleSaveAbility}
         ability={editingAbility}
