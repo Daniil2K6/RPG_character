@@ -5,6 +5,10 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: '/RPG_character/',
+  build: {
+    outDir: 'dist',
+    sourcemap: true
+  },
   server: {
     port: 5173,
   },

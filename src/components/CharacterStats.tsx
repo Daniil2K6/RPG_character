@@ -1,136 +1,180 @@
-import { Box, Paper, Typography, TextField, IconButton, Stack } from '@mui/material';
-import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
-import type { CharacterStats } from '../types/character';
-
-const STAT_LABELS: Record<keyof CharacterStats, string> = {
-  strength: 'Сила',
-  dexterity: 'Ловкость',
-  constitution: 'Телосложение',
-  intelligence: 'Интеллект',
-  wisdom: 'Мудрость',
-  charisma: 'Харизма',
-};
+import { Box, Typography, IconButton, Button } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Character, StatMultipliers, StatKey } from "../types/character";
+import { RACES } from "../constants/races";
+import { STAT_NAMES, BASE_STATS } from '../constants/stats';
+import { CLASSES } from '../constants/classes';
 
 interface CharacterStatsComponentProps {
-  stats: CharacterStats;
-  level: number;
-  freePoints: number;
-  onChange: (newStats: CharacterStats, newFreePoints: number) => void;
-  onLevelChange: (newLevel: number) => void;
-  onFreePointsChange: (newFreePoints: number) => void;
+  character: Character;
+  onCharacterChange: (character: Character) => void;
   readonly?: boolean;
 }
 
-export const CharacterStatsComponent: React.FC<CharacterStatsComponentProps> = ({
-  stats,
-  level,
-  freePoints,
-  onChange,
-  onLevelChange,
-  onFreePointsChange,
+// Функция для подсчета суммарных бонусов от снаряжения
+const calculateEquipmentBonuses = (character: Character): StatMultipliers => {
+  const bonuses: StatMultipliers = {
+    strength: 0,
+    dexterity: 0,
+    constitution: 0,
+    intelligence: 0,
+    wisdom: 0,
+    charisma: 0,
+    magic: 0
+  };
+
+  // Суммируем бонусы от всех предметов снаряжения
+  Object.values(character.equipment).forEach(item => {
+    if (item?.bonuses) {
+      Object.entries(item.bonuses).forEach(([stat, value]) => {
+        bonuses[stat as keyof StatMultipliers] = (bonuses[stat as keyof StatMultipliers] || 0) + value;
+      });
+    }
+  });
+
+  return bonuses;
+};
+
+export const CharacterStatsComponent = ({
+  character,
+  onCharacterChange,
   readonly = false,
-}) => {
-  const handleStatChange = (stat: keyof CharacterStats, value: number, useFreePoints: boolean = false) => {
-    const oldValue = stats[stat];
-    const newStats = { ...stats, [stat]: value };
-    
-    // Если используем очки характеристик
-    if (useFreePoints) {
-      const pointDiff = oldValue - value;
-      const newFreePoints = freePoints + pointDiff;
-      if (newFreePoints >= 0) {
-        onChange(newStats, newFreePoints);
-      }
-    } else {
-      // Просто меняем значение без учета очков
-      onChange(newStats, freePoints);
-    }
+}: CharacterStatsComponentProps) => {
+  const handleFreePointsChange = (delta: number) => {
+    if (readonly) return;
+
+    onCharacterChange({
+      ...character,
+      freePoints: Math.max(0, character.freePoints + delta),
+      lastModifiedAt: new Date().toISOString(),
+    });
   };
 
-  const handleManualInput = (stat: keyof CharacterStats, value: string) => {
-    const numValue = parseInt(value) || 0;
-    handleStatChange(stat, numValue, false);
+  const renderStatRow = (stat: keyof StatMultipliers) => {
+    const baseValue = character.stats?.[stat] ?? BASE_STATS[stat];
+    const raceMultiplier = character.race ? RACES[character.race]?.multipliers[stat] ?? 1 : 1;
+    const classMultiplier = character.class ? CLASSES[character.class]?.multipliers[stat] ?? 1 : 1;
+    const equipmentBonuses = calculateEquipmentBonuses(character);
+    const equipmentBonus = equipmentBonuses[stat] || 0;
+    const totalValue = Number((baseValue * raceMultiplier).toFixed(1));
+
+    return (
+      <Box key={stat} sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        height: '40px',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        position: 'relative'
+      }}>
+        {/* Название характеристики */}
+        <Box sx={{ flex: 1 }}>
+          <Typography>{STAT_NAMES[stat as keyof StatMultipliers]}</Typography>
+        </Box>
+
+        {/* Базовое значение и кнопки изменения */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
+            <IconButton
+              size="small"
+              onClick={() => handleStatChange(stat, -1)}
+            disabled={readonly || baseValue <= 1}
+            >
+              <RemoveIcon fontSize="small" />
+            </IconButton>
+          <Typography sx={{ minWidth: '30px', textAlign: 'center' }}>
+            {baseValue}
+          </Typography>
+            <IconButton
+              size="small"
+              onClick={() => handleStatChange(stat, 1)}
+            disabled={readonly || character.freePoints <= 0}
+            >
+              <AddIcon fontSize="small" />
+            </IconButton>
+        </Box>
+
+        {/* Множитель расы */}
+        <Typography sx={{ 
+          minWidth: '60px', 
+          textAlign: 'center',
+          color: raceMultiplier > 1 ? 'success.main' : raceMultiplier < 1 ? 'error.main' : 'text.primary'
+        }}>
+          ×{raceMultiplier.toFixed(2)}
+        </Typography>
+
+        {/* Итоговое значение */}
+        <Typography sx={{ minWidth: '50px', textAlign: 'right' }}>
+          {totalValue.toFixed(1)}
+          </Typography>
+      </Box>
+    );
   };
 
-  const handleIncrement = (stat: keyof CharacterStats, useFreePoints: boolean = false) => {
-    if (!useFreePoints || freePoints > 0) {
-      handleStatChange(stat, stats[stat] + 1, useFreePoints);
-    }
-  };
+  const handleStatChange = (stat: keyof StatMultipliers, delta: number) => {
+    if (readonly) return;
+    if (delta > 0 && character.freePoints <= 0) return;
+    if (delta < 0 && character.stats[stat] <= 1) return;
 
-  const handleDecrement = (stat: keyof CharacterStats, useFreePoints: boolean = false) => {
-    handleStatChange(stat, stats[stat] - 1, useFreePoints);
+    const newStats = {
+      ...character.stats,
+      [stat]: (character.stats[stat] || BASE_STATS[stat]) + delta
+    };
+
+    onCharacterChange({
+      ...character,
+      stats: newStats,
+      freePoints: character.freePoints - delta,
+      lastModifiedAt: new Date().toISOString(),
+    });
   };
 
   return (
-    <Paper sx={{ p: 2 }}>
-      <Stack spacing={2}>
-        {/* Уровень */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography sx={{ minWidth: 120 }}>Уровень:</Typography>
-          <TextField
-            size="small"
-            type="number"
-            value={level}
-            onChange={(e) => onLevelChange(parseInt(e.target.value) || 1)}
-            disabled={readonly}
-            inputProps={{
-              min: 1,
-              style: { textAlign: 'center' }
-            }}
-            sx={{ width: 80 }}
-          />
-        </Box>
-
-        {/* Характеристики */}
-        {(Object.keys(STAT_LABELS) as Array<keyof CharacterStats>).map((stat) => (
-          <Box key={stat} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography sx={{ minWidth: 120 }}>{STAT_LABELS[stat]}:</Typography>
-            <TextField
-              size="small"
-              type="number"
-              value={stats[stat]}
-              onChange={(e) => handleManualInput(stat, e.target.value)}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+      {Object.keys(BASE_STATS)
+        .filter(key => key !== 'freePoints')
+        .map((stat) => renderStatRow(stat as keyof StatMultipliers))}
+      
+      <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography>
+            Свободные очки: {character.freePoints}
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              variant="outlined"
+          size="small"
+          onClick={() => handleFreePointsChange(-10)}
               disabled={readonly}
-              inputProps={{
-                style: { textAlign: 'center' }
-              }}
-              sx={{ width: 80 }}
-            />
-            <IconButton
-              size="small"
-              onClick={() => handleDecrement(stat, true)}
+        >
+              -10
+            </Button>
+            <Button
+              variant="outlined"
+          size="small"
+          onClick={() => handleFreePointsChange(-1)}
               disabled={readonly}
+        >
+              -1
+            </Button>
+            <Button
+              variant="outlined"
+          size="small"
+          onClick={() => handleFreePointsChange(1)}
+          disabled={readonly}
+        >
+              +1
+            </Button>
+            <Button
+              variant="outlined"
+          size="small"
+          onClick={() => handleFreePointsChange(10)}
+          disabled={readonly}
             >
-              <RemoveIcon />
-            </IconButton>
-            <IconButton
-              size="small"
-              onClick={() => handleIncrement(stat, true)}
-              disabled={readonly || freePoints <= 0}
-            >
-              <AddIcon />
-            </IconButton>
+              +10
+            </Button>
           </Box>
-        ))}
-
-        {/* Свободные очки */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography sx={{ minWidth: 120 }}>Свободные очки:</Typography>
-          <TextField
-            size="small"
-            type="number"
-            value={freePoints}
-            onChange={(e) => onFreePointsChange(parseInt(e.target.value) || 0)}
-            disabled={readonly}
-            inputProps={{
-              min: 0,
-              style: { textAlign: 'center' }
-            }}
-            sx={{ width: 80 }}
-          />
         </Box>
-      </Stack>
-    </Paper>
+      </Box>
+    </Box>
   );
 }; 

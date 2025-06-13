@@ -1,3 +1,21 @@
+import { BASE_STATS } from '../constants/stats';
+
+export interface NovaPoints {
+  on: number;   // Обычные очки
+  son: number;  // Свободные очки
+  lon: number;  // Легендарные очки
+}
+
+export type TemplateType = 'base' | 'equipment' | 'nova-player';
+
+export interface CharacterTemplate {
+  type: string;
+  name: string;
+  description: string;
+  initialStats: CharacterStats;
+  initialPoints?: NovaPoints;
+}
+
 export interface CharacterStats {
   strength: number;
   dexterity: number;
@@ -5,21 +23,34 @@ export interface CharacterStats {
   intelligence: number;
   wisdom: number;
   charisma: number;
+  magic: number;
+  freePoints: number;
 }
 
-export type TemplateType = 'base' | 'nova-player';
+export type StatKey = keyof Omit<CharacterStats, 'freePoints'>;
 
-export type AbilityRarity = 
-  | 'common' 
-  | 'uncommon' 
-  | 'rare' 
-  | 'epic' 
-  | 'legendary' 
-  | 'mythical' 
-  | 'divine' 
-  | 'phantasm' 
-  | 'oversystem' 
-  | 'extrasystem';
+export type StatMultipliers = Record<StatKey, number>;
+
+export type AbilityRarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythical' | 'divine' | 'phantasm' | 'oversystem' | 'extrasystem';
+
+export interface Ability {
+  id: string;
+  name: string;
+  description: string;
+  rarity: AbilityRarity;
+  level: number;
+  maxLevel: number;
+  confirmed?: boolean;
+}
+
+export interface EquipmentItem {
+  name: string;
+  description: string;
+  image?: string;
+  bonuses: StatMultipliers;
+}
+
+export type EquipmentSlot = 'head' | 'neck' | 'shoulders' | 'chest' | 'legs' | 'feet';
 
 export interface CustomTab {
   id: string;
@@ -27,100 +58,101 @@ export interface CustomTab {
   content: string;
 }
 
-export interface NovaPoints {
-  on: number; // Обычные очки навыков
-  son: number; // Свободные очки навыков
-  lon: number; // Легендарные очки навыков
-}
-
-export interface Ability {
-  id: string;
-  name: string;
-  description: string;
-  level: number;
-  maxLevel: number;
-  rarity: AbilityRarity;
-  isExpanded?: boolean;
-}
-
-export interface CharacterTemplate {
-  id: string;
-  type: TemplateType;
-  name: string;
-  description: string;
-  defaultStats?: CharacterStats;
-  initialPoints?: NovaPoints;
-  initialFreePoints?: number;
-}
-
 export interface Character {
   id: string;
   name: string;
   race: string;
+  class: string;
   level: number;
-  imageUrl: string;
-  description: string;
-  stats?: CharacterStats;
-  novaPoints?: NovaPoints;
-  templateType: TemplateType;
-  createdAt: string;
-  lastModifiedAt: string;
-  freePoints?: number;
+  stats: CharacterStats;
+  statMultipliers: StatMultipliers;
+  statBonuses: StatMultipliers;
   abilities: Ability[];
+  equipment: Partial<Record<EquipmentSlot, EquipmentItem>>;
+  novaPoints: NovaPoints;
+  description: string;
   customTabs: CustomTab[];
+  lastModifiedAt: string;
+  createdAt: string;
+  templateType: string;
+  mainImage?: string;
+  freePoints: number;
+  points: NovaPoints;
 }
 
-// Предопределенные шаблоны
-export const TEMPLATES: Record<TemplateType, CharacterTemplate> = {
-  base: {
-    id: 'base',
-    type: 'base',
-    name: 'Базовый',
-    description: 'Базовый шаблон для создания персонажа в любой системе',
-    defaultStats: {
+export type Template = CharacterTemplate;
+
+export const TEMPLATES: Record<string, CharacterTemplate> = {
+  'nova-player': {
+    type: 'nova-player',
+    name: 'Нова-игрок',
+    description: 'Шаблон для создания персонажа с нова-способностями',
+    initialStats: {
       strength: 10,
       dexterity: 10,
       constitution: 10,
       intelligence: 10,
       wisdom: 10,
       charisma: 10,
+      magic: 10,
+      freePoints: 0
     },
-    initialFreePoints: 10,
-  },
-  'nova-player': {
-    id: 'nova-player',
-    type: 'nova-player',
-    name: 'Nova Игрок',
-    description: 'Шаблон для создания игрового персонажа в системе Nova',
     initialPoints: {
       on: 0,
-      son: 1,
-      lon: 0,
+      son: 0,
+      lon: 0
     }
-  },
+  }
 };
 
 export const DEFAULT_CHARACTER: Character = {
   id: crypto.randomUUID(),
-  name: 'Новый персонаж',
-  race: '',
+  name: '',
+  race: 'human',
+  class: 'warrior',
   level: 1,
   description: '',
-  imageUrl: '/placeholder.png',
-  templateType: 'nova-player',
-  customTabs: [
-    {
-      id: crypto.randomUUID(),
-      title: 'Задания',
-      content: ''
-    }
-  ],
+  stats: { ...BASE_STATS },
   abilities: [],
-  novaPoints: {
-    son: 1,
-    on: 0,
-    lon: 0
-  },
+  freePoints: BASE_STATS.freePoints,
   createdAt: new Date().toISOString(),
   lastModifiedAt: new Date().toISOString(),
+  templateType: 'base',
+  customTabs: [],
+  statMultipliers: {
+    strength: 1,
+    dexterity: 1,
+    constitution: 1,
+    intelligence: 1,
+    wisdom: 1,
+    charisma: 1,
+    magic: 1
+  },
+  statBonuses: {
+    strength: 0,
+    dexterity: 0,
+    constitution: 0,
+    intelligence: 0,
+    wisdom: 0,
+    charisma: 0,
+    magic: 0
+  },
+  equipment: {
+    head: undefined,
+    neck: undefined,
+    shoulders: undefined,
+    chest: undefined,
+    legs: undefined,
+    feet: undefined
+  },
+  novaPoints: {
+    on: 0,
+    son: 0,
+    lon: 0
+  },
+  points: {
+    on: 0,
+    son: 0,
+    lon: 0
+  }
 }; 

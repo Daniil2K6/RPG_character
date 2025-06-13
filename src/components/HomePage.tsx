@@ -1,6 +1,6 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
 import { Add as AddIcon, Upload as UploadIcon } from '@mui/icons-material';
-import { type Character, type TemplateType } from '../types/character';
+import { Character, TemplateType } from '../types/character';
 import { TEMPLATES } from '../types/templates';
 import { Timer } from './Timer';
 
@@ -21,7 +21,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         try {
           const character = JSON.parse(e.target?.result as string) as Character;
           // Проверяем, что загруженный персонаж имеет правильный шаблон
-          if (!TEMPLATES[character.templateType]) {
+          if (character.templateType && !TEMPLATES[character.templateType as keyof typeof TEMPLATES]) {
             throw new Error('Неизвестный тип шаблона');
           }
           onLoadCharacter(character);
@@ -45,6 +45,20 @@ export const HomePage: React.FC<HomePageProps> = ({
           </Typography>
           <Typography variant="caption" component="div" sx={{ ml: 2, opacity: 0.8 }}>
             • Начальные очки: 1 СОН
+          </Typography>
+        </Box>
+      );
+    } else if (template.type === 'equipment') {
+      return (
+        <Box component="span">
+          <Typography variant="caption" component="span" sx={{ ml: 2, opacity: 0.8 }}>
+            {template.description}
+          </Typography>
+          <Typography variant="caption" component="div" sx={{ ml: 2, opacity: 0.8 }}>
+            • Расширенная система снаряжения
+          </Typography>
+          <Typography variant="caption" component="div" sx={{ ml: 2, opacity: 0.8 }}>
+            • Бонусы от экипировки
           </Typography>
         </Box>
       );
@@ -74,7 +88,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 variant="contained"
                 size="large"
                 startIcon={<AddIcon />}
-                onClick={() => onCreateCharacter(template.type)}
+                onClick={() => onCreateCharacter(template.type as TemplateType)}
                 fullWidth
               >
                 Шаблон ({template.name})
