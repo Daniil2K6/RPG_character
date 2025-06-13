@@ -69,14 +69,14 @@ export const CharacterStatsComponent = ({
             </IconButton>
         </Box>
 
-        {/* Множитель класса */}
+        {/* Множитель расы */}
         <Typography sx={{ 
           minWidth: '60px', 
           textAlign: 'center',
-          color: classMultiplier > 1 ? 'success.main' : classMultiplier < 1 ? 'error.main' : 'text.primary'
+          color: raceMultiplier > 1 ? 'success.main' : raceMultiplier < 1 ? 'error.main' : 'text.primary'
         }}>
-          ×{classMultiplier.toFixed(2)}
-          </Typography>
+          ×{raceMultiplier.toFixed(2)}
+        </Typography>
 
         {/* Итоговое значение */}
         <Typography sx={{ minWidth: '50px', textAlign: 'right' }}>
