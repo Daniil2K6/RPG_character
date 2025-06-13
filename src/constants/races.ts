@@ -136,61 +136,61 @@ export const RACES: Record<string, Race> = {
   vampire: {
     name: 'Вампир',
     multipliers: {
-      strength: 0.6,
-      dexterity: 1.5,
-      constitution: 0.7,
-      intelligence: 1.4,
-      wisdom: 1.1,
-      charisma: 2.0,
-      magic: 1.7
+      strength: 1.5,
+      dexterity: 1.4,
+      constitution: 1.0,
+      intelligence: 1.2,
+      wisdom: 1.3,
+      charisma: 1.7,
+      magic: 1.5
     }
   },
   dark_elf: {
     name: 'Тёмный эльф',
     multipliers: {
-      strength: 0.4,
-      dexterity: 1.5,
-      constitution: 0.3,
-      intelligence: 1.6,
-      wisdom: 1.2,
-      charisma: 1.3,
-      magic: 2.3
+      strength: 0.1,
+      dexterity: 1.4,
+      constitution: 0.2,
+      intelligence: 1.5,  
+      wisdom: 1.3,
+      charisma: 1.4,
+      magic: 2.4
     }
   },
   gnoll: {
     name: 'Гнолл',
     multipliers: {
-      strength: 1.7,
-      dexterity: 1.1,
-      constitution: 1.5,
-      intelligence: 0.5,
+      strength: 0.8,
+      dexterity: 2.5,
+      constitution: 0.9,
+      intelligence: 0.6,
       wisdom: 0.7,
-      charisma: 0.6,
-      magic: 0.4
+      charisma: 0.4,
+      magic: 0.6
     }
   },
   beastfolk: {
-    name: 'Зверолид',
+    name: 'Зверолюд',
     multipliers: {
-      strength: 1.3,
-      dexterity: 1.4,
-      constitution: 1.2,
-      intelligence: 0.8,
+      strength: 1.2,
+      dexterity: 1.5,
+      constitution: 1.3,
+      intelligence: 1.0,
       wisdom: 1.0,
-      charisma: 0.9,
-      magic: 0.7
+      charisma: 1.2,
+      magic: 0.8
     }
   },
   arachnid: {
     name: 'Арахнид',
     multipliers: {
       strength: 0.8,
-      dexterity: 1.7,
-      constitution: 1.0,
+      dexterity: 2.0,
+      constitution: 0.9,
       intelligence: 1.3,
       wisdom: 1.0,
       charisma: 0.5,
-      magic: 1.5
+      magic: 1.6
     }
   }
 };
