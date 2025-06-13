@@ -1,4 +1,4 @@
-import { Box, Paper, Typography, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { Save as SaveIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { Character } from '../types/character';
 import { BaseTemplate } from '../types/templates/base/BaseTemplate';
@@ -12,13 +12,13 @@ interface CharacterCardProps {
   readonly?: boolean;
 }
 
-export const CharacterCard = ({
+export const CharacterCard: React.FC<CharacterCardProps> = ({
   character,
   onCharacterChange,
   onBack,
   onSave,
   readonly = false,
-}: CharacterCardProps) => {
+}) => {
   const renderTemplate = () => {
     switch (character.templateType) {
       case 'nova-player':
@@ -71,4 +71,4 @@ export const CharacterCard = ({
       {renderTemplate()}
     </Box>
   );
-}; 
+};

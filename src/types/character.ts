@@ -4,6 +4,8 @@ export interface NovaPoints {
   on: number;   // Обычные очки
   son: number;  // Свободные очки
   lon: number;  // Легендарные очки
+  current: number; // Текущие очки
+  max: number;    // Максимальные очки
 }
 
 export type TemplateType = 'base' | 'equipment' | 'nova-player';
@@ -100,7 +102,9 @@ export const TEMPLATES: Record<string, CharacterTemplate> = {
     initialPoints: {
       on: 0,
       son: 0,
-      lon: 0
+      lon: 0,
+      current: 0,
+      max: 0
     }
   }
 };
@@ -148,11 +152,13 @@ export const DEFAULT_CHARACTER: Character = {
   novaPoints: {
     on: 0,
     son: 0,
-    lon: 0
+    lon: 0,
+    current: 0,
+    max: 0
   },
   points: {
     on: 0,
     son: 0,
     lon: 0
   }
-}; 
+};
