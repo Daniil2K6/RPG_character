@@ -47,7 +47,6 @@ function App() {
             character={character}
             onCharacterChange={handleCharacterChange}
             onBack={() => setCharacter(null)}
-            onSave={() => { /* TODO: реализовать сохранение персонажа */ }}
           />
         );
       default:
