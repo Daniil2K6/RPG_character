@@ -5,7 +5,6 @@ import type { Character, Ability } from '../../../types/character';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { v4 as uuidv4 } from 'uuid';
 import { AbilityDialog, AbilityData } from './AbilityDialog';
-import { AbilityRank, AbilityRankColor } from './index';
 import { RARITY_COLORS, RARITY_LABELS, RARITY_ORDER } from '../../../constants';
 
 interface NovaTemplateProps {
@@ -16,7 +15,13 @@ interface NovaTemplateProps {
 
 export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharacterChange, readonly = false }) => {
   // Локальное состояние для очков и уровня
-  const [points, setPoints] = useState(character.points || { on: 0, son: 1, lon: 0 });
+  const [points, setPoints] = useState(character.points || { 
+    on: 0, 
+    son: 1, 
+    lon: 0,
+    current: 0,
+    max: 10
+  });
   const [level, setLevel] = useState(character.level || 1);
   const [tabIndex, setTabIndex] = useState(0);
   const [tabs, setTabs] = useState(character.customTabs && character.customTabs.length > 0
@@ -416,4 +421,4 @@ export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharact
       </Box>
     </Box>
   );
-}; 
+};

@@ -42,14 +42,17 @@ export const createEmptyCharacter = (templateType: TemplateType = 'base'): Chara
   },
   abilities: [],
   equipment: {},
-    novaPoints: template?.initialPoints || {
+  novaPoints: template?.initialPoints || {
+    on: 0,
+    son: 0,
+    lon: 0,
     current: 0,
     max: 0
   },
   description: '',
-    createdAt: new Date().toISOString(),
+  createdAt: new Date().toISOString(),
     lastModifiedAt: new Date().toISOString(),
     templateType: templateType,
     freePoints: template?.initialStats?.freePoints || BASE_STATS.freePoints
   };
-}; 
+};

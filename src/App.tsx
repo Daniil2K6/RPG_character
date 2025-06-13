@@ -47,6 +47,7 @@ function App() {
             character={character}
             onCharacterChange={handleCharacterChange}
             onBack={() => setCharacter(null)}
+            onSave={() => console.log('Saving character:', character)}
           />
         );
       default:
@@ -87,4 +88,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
