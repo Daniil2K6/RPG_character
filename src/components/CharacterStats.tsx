@@ -14,30 +14,6 @@ interface CharacterStatsComponentProps {
   readonly?: boolean;
 }
 
-// Функция для подсчета суммарных бонусов от снаряжения
-const calculateEquipmentBonuses = (character: Character): StatMultipliers => {
-  const bonuses: StatMultipliers = {
-    strength: 0,
-    dexterity: 0,
-    constitution: 0,
-    intelligence: 0,
-    wisdom: 0,
-    charisma: 0,
-    magic: 0
-  };
-
-  // Суммируем бонусы от всех предметов снаряжения
-  Object.values(character.equipment).forEach(item => {
-    if (item?.bonuses) {
-      Object.entries(item.bonuses).forEach(([stat, value]) => {
-        bonuses[stat as keyof StatMultipliers] = (bonuses[stat as keyof StatMultipliers] || 0) + value;
-      });
-    }
-  });
-
-  return bonuses;
-};
-
 export const CharacterStatsComponent = ({
   character,
   onCharacterChange,
@@ -57,7 +33,6 @@ export const CharacterStatsComponent = ({
     const baseValue = character.stats?.[stat] ?? BASE_STATS[stat];
     const raceMultiplier = character.race ? RACES[character.race]?.multipliers[stat] ?? 1 : 1;
     const classMultiplier = character.class ? CLASSES[character.class]?.multipliers[stat] ?? 1 : 1;
-    const equipmentBonuses = calculateEquipmentBonuses(character);
     const totalValue = Number((baseValue * raceMultiplier).toFixed(1));
 
     return (

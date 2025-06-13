@@ -8,7 +8,6 @@ interface CharacterCardProps {
   character: Character;
   onCharacterChange: (character: Character) => void;
   onBack: () => void;
-  onSave: () => void;
   readonly?: boolean;
 }
 
@@ -16,7 +15,6 @@ export const CharacterCard = ({
   character,
   onCharacterChange,
   onBack,
-  onSave,
   readonly = false,
 }: CharacterCardProps) => {
   const renderTemplate = () => {

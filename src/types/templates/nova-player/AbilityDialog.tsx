@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Stack, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { AbilityRank, AbilityRankColor } from './index';
+import { AbilityRank } from './index';
 import { RARITY_ORDER, RARITY_COLORS, RARITY_LABELS } from '../../../constants';
 
 export interface AbilityData {
@@ -30,7 +30,7 @@ export const AbilityDialog: React.FC<AbilityDialogProps> = ({ open, onClose, onS
   const [description, setDescription] = useState(initialData?.description || '');
   const [rank, setRank] = useState<AbilityRank>(initialData?.rank || AbilityRank.COMMON);
   const [level, setLevel] = useState(initialData?.level || 1);
-  const [maxLevel, setMaxLevel] = useState(getMaxLevelForRank(rank));
+  const [, setMaxLevel] = useState(getMaxLevelForRank(rank));
 
   useEffect(() => {
     setMaxLevel(getMaxLevelForRank(rank));
@@ -116,4 +116,4 @@ export const AbilityDialog: React.FC<AbilityDialogProps> = ({ open, onClose, onS
       </DialogActions>
     </Dialog>
   );
-}; 
+};
