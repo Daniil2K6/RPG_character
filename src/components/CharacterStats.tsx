@@ -6,7 +6,6 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Character, StatMultipliers } from "../types/character";
 import { RACES } from "../constants/races";
 import { STAT_NAMES, BASE_STATS } from '../constants/stats';
-import { CLASSES } from '../constants/classes';
 
 interface CharacterStatsComponentProps {
   character: Character;
@@ -32,7 +31,6 @@ export const CharacterStatsComponent = ({
   const renderStatRow = (stat: keyof StatMultipliers) => {
     const baseValue = character.stats?.[stat] ?? BASE_STATS[stat];
     const raceMultiplier = character.race ? RACES[character.race]?.multipliers[stat] ?? 1 : 1;
-    const classMultiplier = character.class ? CLASSES[character.class]?.multipliers[stat] ?? 1 : 1;
     const totalValue = Number((baseValue * raceMultiplier).toFixed(1));
 
     return (
