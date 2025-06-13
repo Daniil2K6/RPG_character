@@ -66,10 +66,10 @@ export const BaseAbilities = ({
           }}
         >
           <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <TextField
-              label="Название"
-              value={ability.name}
-              onChange={(e) => handleAbilityChange(ability.id, 'name', e.target.value)}
+          <TextField
+            label="Название"
+            value={ability.name}
+            onChange={(e) => handleAbilityChange(ability.id, 'name', e.target.value)}
               disabled={readonly || ability.confirmed}
               fullWidth
               size="small"
@@ -141,26 +141,26 @@ export const BaseAbilities = ({
                   Подтвердить
                 </Button>
               )}
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => handleRemoveAbility(ability.id)}
-              >
-                Удалить
-              </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleRemoveAbility(ability.id)}
+          >
+            Удалить
+          </Button>
             </Box>
           )}
         </Box>
       ))}
 
       {!readonly && (
-        <Button
-          variant="contained"
-          onClick={handleAddAbility}
+      <Button
+        variant="contained"
+        onClick={handleAddAbility}
           fullWidth
-        >
-          Добавить способность
-        </Button>
+      >
+        Добавить способность
+      </Button>
       )}
     </Box>
   );

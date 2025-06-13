@@ -47,7 +47,7 @@ function App() {
             character={character}
             onCharacterChange={handleCharacterChange}
             onBack={() => setCharacter(null)}
-            onSave={() => console.log('Saving character:', character)}
+            onSave={() => { /* TODO: реализовать сохранение персонажа */ }}
           />
         );
       default:

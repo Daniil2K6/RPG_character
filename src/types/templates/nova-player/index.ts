@@ -17,7 +17,9 @@ export const novaPlayerTemplate: CharacterTemplate = {
   initialPoints: {
     on: 0,
     son: 1,
-    lon: 0
+    lon: 0,
+    current: 0,
+    max: 100
   }
 };
 
@@ -35,4 +37,4 @@ export const AbilityRankColor: Record<AbilityRank, string> = {
   [AbilityRank.LEGENDARY]: '#ffd700',   // Золотой
 };
 
-export default novaPlayerTemplate; 
+export default novaPlayerTemplate;

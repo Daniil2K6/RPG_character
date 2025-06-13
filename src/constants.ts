@@ -1,5 +1,29 @@
 import { AbilityRarity } from './types/character';
 
+export const RARITY_LABELS: Record<AbilityRarity, string> = {
+  common: 'Обычная',
+  rare: 'Редкая',
+  epic: 'Эпическая',
+  legendary: 'Легендарная',
+  mythical: 'Мифическая',
+  divine: 'Божественная',
+  phantasm: 'Фантазм',
+  oversystem: 'Внесистемная',
+  extrasystem: 'Экстрасистемная'
+};
+
+export const RARITY_COLORS: Record<AbilityRarity, string> = {
+  common: '#cccccc',
+  rare: '#1a75ff',
+  epic: '#cc00ff',
+  legendary: '#ffd700',
+  mythical: '#ff4d4d',
+  divine: '#ff8c1a',
+  phantasm: '#00cc99',
+  oversystem: '#ff1a1a',
+  extrasystem: '#000000'
+};
+
 export const RARITY_ORDER: AbilityRarity[] = [
   'common',
   'rare',
@@ -11,27 +35,3 @@ export const RARITY_ORDER: AbilityRarity[] = [
   'oversystem',
   'extrasystem'
 ];
-
-export const RARITY_COLORS: Record<AbilityRarity, string> = {
-  common: '#ffffff', // Белый
-  rare: '#0000ff', // Синий
-  epic: '#800080', // Фиолетовый
-  legendary: '#ffa500', // Оранжевый
-  mythical: '#ff0000', // Красный
-  divine: '#ffff00', // Желтый
-  phantasm: '#00ffff', // Голубой
-  oversystem: '#ff00ff', // Розовый
-  extrasystem: '#00ff00' // Зеленый
-};
-
-export const RARITY_LABELS: Record<AbilityRarity, string> = {
-  common: 'Обычный',
-  rare: 'Редкий',
-  epic: 'Эпический',
-  legendary: 'Легендарный',
-  mythical: 'Мифический',
-  divine: 'Божественный',
-  phantasm: 'Фантазм',
-  oversystem: 'Надсистемный',
-  extrasystem: 'Внесистемный'
-}; 

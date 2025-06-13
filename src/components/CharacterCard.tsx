@@ -12,13 +12,13 @@ interface CharacterCardProps {
   readonly?: boolean;
 }
 
-export const CharacterCard: React.FC<CharacterCardProps> = ({
+export const CharacterCard = ({
   character,
   onCharacterChange,
   onBack,
   onSave,
   readonly = false,
-}) => {
+}: CharacterCardProps) => {
   const renderTemplate = () => {
     switch (character.templateType) {
       case 'nova-player':
@@ -26,8 +26,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           <NovaTemplate
             character={character}
             onCharacterChange={onCharacterChange}
-            onBack={onBack}
-            onSave={onSave}
             readonly={readonly}
           />
         );

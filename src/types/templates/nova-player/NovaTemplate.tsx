@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Paper, Typography, TextField, Button, Stack, IconButton, Tab, Tabs } from '@mui/material';
+import { Box, TextField, Button, Stack, IconButton, Tab, Tabs } from '@mui/material';
 import { NovaPointsComponent } from './NovaPoints';
 import type { Character, Ability } from '../../../types/character';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { v4 as uuidv4 } from 'uuid';
 import { AbilityDialog, AbilityData } from './AbilityDialog';
 import { RARITY_COLORS, RARITY_LABELS, RARITY_ORDER } from '../../../constants';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 interface NovaTemplateProps {
   character: Character;
@@ -15,18 +17,14 @@ interface NovaTemplateProps {
 
 export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharacterChange, readonly = false }) => {
   // Локальное состояние для очков и уровня
-  const [points, setPoints] = useState(character.points || { 
-    on: 0, 
-    son: 1, 
-    lon: 0,
-    current: 0,
-    max: 10
-  });
+  const [points, setPoints] = useState(character.novaPoints || { on: 0, son: 1, lon: 0, current: 0, max: 100 });
   const [level, setLevel] = useState(character.level || 1);
   const [tabIndex, setTabIndex] = useState(0);
-  const [tabs, setTabs] = useState(character.customTabs && character.customTabs.length > 0
-    ? character.customTabs
-    : [{ id: uuidv4(), title: 'ЗАДАНИЯ', content: '' }]);
+  const [tabs, setTabs] = useState<Array<{ id: string; title: string; content: string }>>(
+    Array.isArray(character.customTabs) && character.customTabs.length > 0
+      ? character.customTabs
+      : [{ id: uuidv4(), title: 'ЗАДАНИЯ', content: '' }]
+  );
   const [abilities, setAbilities] = useState<Ability[]>(character.abilities || []);
   const [isAbilityDialogOpen, setIsAbilityDialogOpen] = useState(false);
   const [creatingAbilityType, setCreatingAbilityType] = useState<'son' | 'lon' | 'free' | null>(null);
@@ -50,7 +48,7 @@ export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharact
   // Обновление очков и уровня
   const handlePointsChange = (newPoints: any) => {
     setPoints(newPoints);
-    onCharacterChange({ ...character, points: newPoints });
+    onCharacterChange({ ...character, novaPoints: newPoints });
   };
   const handleLevelChange = (newLevel: number) => {
     setLevel(newLevel);
@@ -108,14 +106,14 @@ export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharact
       if (creatingAbilityType === 'son') {
         const newPoints = { ...points, son: Math.max(0, points.son - 1) };
         setPoints(newPoints);
-        onCharacterChange({ ...character, points: newPoints, abilities: newAbilities });
+        onCharacterChange({ ...character, novaPoints: newPoints, abilities: newAbilities });
         setAbilities(newAbilities);
         return;
       }
       if (creatingAbilityType === 'lon') {
         const newPoints = { ...points, lon: Math.max(0, points.lon - 1) };
         setPoints(newPoints);
-        onCharacterChange({ ...character, points: newPoints, abilities: newAbilities });
+        onCharacterChange({ ...character, novaPoints: newPoints, abilities: newAbilities });
         setAbilities(newAbilities);
         return;
       }
@@ -148,7 +146,7 @@ export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharact
     setAbilities(newAbilities);
     const newPoints = { ...points, on: points.on - 1 };
     setPoints(newPoints);
-    onCharacterChange({ ...character, abilities: newAbilities, points: newPoints });
+    onCharacterChange({ ...character, abilities: newAbilities, novaPoints: newPoints });
   };
   const handleLevelUp10Ability = (ability: Ability) => {
     if (readonly || points.lon <= 0 || ability.level >= ability.maxLevel) return;
@@ -160,7 +158,7 @@ export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharact
     setAbilities(newAbilities);
     const newPoints = { ...points, lon: points.lon - 1 };
     setPoints(newPoints);
-    onCharacterChange({ ...character, abilities: newAbilities, points: newPoints });
+    onCharacterChange({ ...character, abilities: newAbilities, novaPoints: newPoints });
   };
 
   const handleEvolveAbility = (ability: Ability) => {
@@ -178,7 +176,7 @@ export const NovaTemplate: React.FC<NovaTemplateProps> = ({ character, onCharact
     setAbilities(newAbilities);
     const newPoints = { ...points, lon: points.lon - 1 };
     setPoints(newPoints);
-    onCharacterChange({ ...character, abilities: newAbilities, points: newPoints });
+    onCharacterChange({ ...character, abilities: newAbilities, novaPoints: newPoints });
   };
 
   return (

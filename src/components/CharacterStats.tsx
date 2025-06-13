@@ -1,7 +1,9 @@
-import { Box, Typography, IconButton, Button } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Character, StatMultipliers, StatKey } from "../types/character";
+import { Character, StatMultipliers } from "../types/character";
 import { RACES } from "../constants/races";
 import { STAT_NAMES, BASE_STATS } from '../constants/stats';
 import { CLASSES } from '../constants/classes';
@@ -56,7 +58,6 @@ export const CharacterStatsComponent = ({
     const raceMultiplier = character.race ? RACES[character.race]?.multipliers[stat] ?? 1 : 1;
     const classMultiplier = character.class ? CLASSES[character.class]?.multipliers[stat] ?? 1 : 1;
     const equipmentBonuses = calculateEquipmentBonuses(character);
-    const equipmentBonus = equipmentBonuses[stat] || 0;
     const totalValue = Number((baseValue * raceMultiplier).toFixed(1));
 
     return (
@@ -93,14 +94,14 @@ export const CharacterStatsComponent = ({
             </IconButton>
         </Box>
 
-        {/* Множитель расы */}
+        {/* Множитель класса */}
         <Typography sx={{ 
           minWidth: '60px', 
           textAlign: 'center',
-          color: raceMultiplier > 1 ? 'success.main' : raceMultiplier < 1 ? 'error.main' : 'text.primary'
+          color: classMultiplier > 1 ? 'success.main' : classMultiplier < 1 ? 'error.main' : 'text.primary'
         }}>
-          ×{raceMultiplier.toFixed(2)}
-        </Typography>
+          ×{classMultiplier.toFixed(2)}
+          </Typography>
 
         {/* Итоговое значение */}
         <Typography sx={{ minWidth: '50px', textAlign: 'right' }}>
@@ -177,4 +178,4 @@ export const CharacterStatsComponent = ({
       </Box>
     </Box>
   );
-}; 
+};

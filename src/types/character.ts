@@ -5,7 +5,7 @@ export interface NovaPoints {
   son: number;  // Свободные очки
   lon: number;  // Легендарные очки
   current: number; // Текущие очки
-  max: number;    // Максимальные очки
+  max: number;     // Максимальные очки
 }
 
 export type TemplateType = 'base' | 'equipment' | 'nova-player';
@@ -70,7 +70,7 @@ export interface Character {
   statMultipliers: StatMultipliers;
   statBonuses: StatMultipliers;
   abilities: Ability[];
-  equipment: Partial<Record<EquipmentSlot, EquipmentItem>>;
+  equipment: Record<EquipmentSlot, EquipmentItem | null>;
   novaPoints: NovaPoints;
   description: string;
   customTabs: CustomTab[];
@@ -79,7 +79,6 @@ export interface Character {
   templateType: string;
   mainImage?: string;
   freePoints: number;
-  points: NovaPoints;
 }
 
 export type Template = CharacterTemplate;
@@ -142,12 +141,12 @@ export const DEFAULT_CHARACTER: Character = {
     magic: 0
   },
   equipment: {
-    head: undefined,
-    neck: undefined,
-    shoulders: undefined,
-    chest: undefined,
-    legs: undefined,
-    feet: undefined
+    head: null,
+    neck: null,
+    shoulders: null,
+    chest: null,
+    legs: null,
+    feet: null
   },
   novaPoints: {
     on: 0,
@@ -155,10 +154,5 @@ export const DEFAULT_CHARACTER: Character = {
     lon: 0,
     current: 0,
     max: 0
-  },
-  points: {
-    on: 0,
-    son: 0,
-    lon: 0
   }
 };
