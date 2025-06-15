@@ -92,10 +92,10 @@ export const CLASSES: Record<string, Class> = {
       strength: 0.5,
       dexterity: 1.0,
       constitution: 0.7,
-      intelligence: 1.3,
-      wisdom: 1.6,
+      intelligence: 1.2,
+      wisdom: 1.3,
       charisma: 1.1,
-      magic: 1.9
+      magic: 1.7
     }
   },
   priest: {
@@ -105,8 +105,8 @@ export const CLASSES: Record<string, Class> = {
       strength: 0.8,
       dexterity: 0.9,
       constitution: 1.0,
-      intelligence: 1.2,
-      wisdom: 1.4,
+      intelligence: 1.0,
+      wisdom: 1.1,
       charisma: 1.5,
       magic: 1.4
     }
@@ -120,7 +120,7 @@ export const CLASSES: Record<string, Class> = {
       constitution: 1.5,
       intelligence: 0.7,
       wisdom: 1.1,
-      charisma: 1.3,
+      charisma: 1.4,
       magic: 1.2
     }
   },
